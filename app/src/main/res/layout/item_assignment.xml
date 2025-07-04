@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/item_assignment.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/assignment_card_background"
+    android:padding="16dp">
+
+    <!-- Assignment Image/Icon Area -->
+    <ImageView
+        android:id="@+id/assignmentIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="#FFE5B4"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Assignment Title -->
+    <TextView
+        android:id="@+id/assignmentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Assignment Title"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Due Date -->
+    <TextView
+        android:id="@+id/assignmentDueDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Due: Date"
+        android:textColor="#6C757D"
+        android:textSize="14sp" />
+
+</LinearLayout>

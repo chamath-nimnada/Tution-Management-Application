@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionManagementApplication">
         <activity
+            android:name=".student.Pending"
+            android:exported="false" />
+        <activity
             android:name=".student.StudentDashboard"
             android:exported="false" />
         <activity

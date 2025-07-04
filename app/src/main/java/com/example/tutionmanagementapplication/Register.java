@@ -161,7 +161,7 @@ public class Register extends AppCompatActivity {
                     student.put("class",         txtClass);
                     student.put("registeredAt",  System.currentTimeMillis());
                     student.put("position",      "student");
-                    student.put("status",        "pending");
+                    student.put("status",        "approved");
 
                     db.collection("students")
                             .document(uid)          // doc id = uid
