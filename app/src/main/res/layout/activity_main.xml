@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/getstartbg" />
+
+    <TextView
+        android:id="@+id/textViewWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learning, Simplified"
+        android:textSize="38sp"
+        android:textColor="@color/blueGreen"
+        android:layout_marginTop="355dp"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Everything you need. Nothing you don’t. Your journey starts with a single tap."
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="420dp"
+        android:textColor="@color/gray"/>
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="Register"
+        android:textSize="30sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="550dp"
+        android:backgroundTint="@color/blueGreen"/>
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="Login"
+        android:textSize="30sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="625dp"
+        android:backgroundTint="@color/lightGreenV4"/>
+
+</RelativeLayout>

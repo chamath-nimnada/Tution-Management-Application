@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965919636344",
+    "project_id": "tuition-management-app-5000d",
+    "storage_bucket": "tuition-management-app-5000d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965919636344:android:f7a6b638035eb1e0d2268d",
+        "android_client_info": {
+          "package_name": "com.example.tutionmanagementapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANB52hNXnrgQmEkZy6s7n87rYxLTvS3_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
