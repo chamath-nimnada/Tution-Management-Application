@@ -30,27 +30,34 @@
                 android:padding="25dp"
                 android:layout_gravity="center_horizontal">
 
-                <!-- HEADER -->
-                <ImageView
-                    android:id="@+id/goBack"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/ico_arrow_back"
-                    android:backgroundTint="@color/gray"
-                    android:clickable="true"
-                    android:focusable="true" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/registrationText"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Registration Form"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    <!-- HEADER -->
+                    <ImageView
+                        android:id="@+id/goBack"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/ico_arrow_back"
+                        android:backgroundTint="@color/gray"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/registrationText"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="Registration Form"
+                        android:layout_marginLeft="48dp"
+                        android:textColor="@color/gray"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
                 <!-- LOGIN CREDENTIALS -->
                 <TextView
@@ -153,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="20dp"
-                    android:text="Subject"
+                    android:text="Grade Level and Subject"
                     android:textColor="@color/blueGreen" />
 
                 <AutoCompleteTextView
@@ -164,8 +171,8 @@
                     android:background="@drawable/edit_text_outline"
                     android:drawableEnd="@drawable/ico_arrow_drop_down"
                     android:drawablePadding="8dp"
-                    android:focusable="false"
-                    android:hint="Grade"
+                    android:focusable="true"
+                    android:hint="Select Grade Level"
                     android:inputType="none"
                     android:padding="14dp" />
 
@@ -178,8 +185,8 @@
                     android:drawableEnd="@drawable/ico_arrow_drop_down"
                     android:drawablePadding="8dp"
                     android:enabled="false"
-                    android:focusable="false"
-                    android:hint="Select"
+                    android:focusable="true"
+                    android:hint="Select Subject"
                     android:inputType="none"
                     android:padding="14dp" />
 

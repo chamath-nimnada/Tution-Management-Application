@@ -1,13 +1,18 @@
 package com.example.tutionmanagementapplication.student;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tutionmanagementapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,6 +25,7 @@ public class StudentDashboard extends AppCompatActivity {
 
     // UI Components
     private TextView welcomeMessage;
+    private FloatingActionButton fabQRCode;
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -49,6 +55,17 @@ public class StudentDashboard extends AppCompatActivity {
             // User is not logged in, redirect to login
             redirectToLogin();
         }
+
+        // FloatingActionButton for QR Code
+        fabQRCode = findViewById(R.id.fabAddTask);
+        fabQRCode.setOnClickListener(view -> {
+            if (currentUser != null) {
+                Intent intent = new Intent(StudentDashboard.this, QrView.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(StudentDashboard.this, "Please log in first", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initializeViews() {
@@ -89,13 +106,10 @@ public class StudentDashboard extends AppCompatActivity {
 
                     Log.d(TAG, "User data loaded successfully");
                 } else {
-                    // Document doesn't exist - user should have been created during login
                     Log.w(TAG, "User document doesn't exist for userId: " + userId);
-                    Log.w(TAG, "Check if document ID matches the Firebase Auth UID");
                     handleUserDataError();
                 }
             } else {
-                // Error occurred
                 Log.e(TAG, "Error getting user document", task.getException());
                 if (task.getException() != null) {
                     Log.e(TAG, "Error details: " + task.getException().getMessage());
@@ -103,31 +117,41 @@ public class StudentDashboard extends AppCompatActivity {
                 handleUserDataError();
             }
         });
+
+        // Navigations
+        LinearLayout course = findViewById(R.id.navCourses);
+        course.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CourseDashboard.class);
+            startActivity(intent);
+        });
+
+        LinearLayout dashboard = findViewById(R.id.navDashboard);
+        dashboard.setOnClickListener(view -> {
+            Intent intent = new Intent(this, StudentDashboard.class);
+            startActivity(intent);
+        });
+
+        LinearLayout announcements = findViewById(R.id.navProfile);
+        announcements.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ProfileDashboard.class);
+            startActivity(intent);
+        });
     }
 
-
-
     private void handleUserDataError() {
-        // Show error message and fallback
         welcomeMessage.setText("Welcome, User!");
         Toast.makeText(this, "Unable to load user data", Toast.LENGTH_SHORT).show();
     }
 
     private void redirectToLogin() {
-        // TODO: Implement redirect to login activity
-        // Intent intent = new Intent(this, LoginActivity.class);
-        // startActivity(intent);
-        // finish();
-
-        // For now, just show a message
         welcomeMessage.setText("Welcome, Please log in!");
         Toast.makeText(this, "Please log in to continue", Toast.LENGTH_LONG).show();
+        // Redirect logic can be added here if needed
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             redirectToLogin();
@@ -147,9 +171,7 @@ public class StudentDashboard extends AppCompatActivity {
         private String position;
         private String status;
 
-        public User() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
-        }
+        public User() {}
 
         public User(String fullName, String email, String address, String birthday,
                     String className, String grade, String parentPhone, String phone,
@@ -167,84 +189,34 @@ public class StudentDashboard extends AppCompatActivity {
         }
 
         // Getters and setters
-        public String getFullName() {
-            return fullName;
-        }
+        public String getFullName() { return fullName; }
+        public void setFullName(String fullName) { this.fullName = fullName; }
 
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
 
-        public String getEmail() {
-            return email;
-        }
+        public String getAddress() { return address; }
+        public void setAddress(String address) { this.address = address; }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+        public String getBirthday() { return birthday; }
+        public void setBirthday(String birthday) { this.birthday = birthday; }
 
-        public String getAddress() {
-            return address;
-        }
+        public String getClassName() { return className; }
+        public void setClassName(String className) { this.className = className; }
 
-        public void setAddress(String address) {
-            this.address = address;
-        }
+        public String getGrade() { return grade; }
+        public void setGrade(String grade) { this.grade = grade; }
 
-        public String getBirthday() {
-            return birthday;
-        }
+        public String getParentPhone() { return parentPhone; }
+        public void setParentPhone(String parentPhone) { this.parentPhone = parentPhone; }
 
-        public void setBirthday(String birthday) {
-            this.birthday = birthday;
-        }
+        public String getPhone() { return phone; }
+        public void setPhone(String phone) { this.phone = phone; }
 
-        public String getClassName() {
-            return className;
-        }
+        public String getPosition() { return position; }
+        public void setPosition(String position) { this.position = position; }
 
-        public void setClassName(String className) {
-            this.className = className;
-        }
-
-        public String getGrade() {
-            return grade;
-        }
-
-        public void setGrade(String grade) {
-            this.grade = grade;
-        }
-
-        public String getParentPhone() {
-            return parentPhone;
-        }
-
-        public void setParentPhone(String parentPhone) {
-            this.parentPhone = parentPhone;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public String getPosition() {
-            return position;
-        }
-
-        public void setPosition(String position) {
-            this.position = position;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
     }
 }

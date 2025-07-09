@@ -39,7 +39,7 @@ public class Student {
         this.status       = status;
     }
 
-    /* ---------- getters (generate setters too if you need them) ---------- */
+    /* ---------- getters---------- */
 
     public String getUid()         { return uid; }
     public String getFullName()    { return fullName; }

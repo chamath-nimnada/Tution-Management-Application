@@ -153,11 +153,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="Assignments Due Soon"
                     android:textColor="#000000"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
+                    android:textStyle="bold" />
 
                 <!-- Assignments RecyclerView for Horizontal Scroll -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -171,12 +171,12 @@
                 <TextView
                     android:id="@+id/noAssignments"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="130dp"
+                    android:gravity="center"
+                    android:padding="32dp"
                     android:text="No assignments due soon"
                     android:textColor="#6C757D"
                     android:textSize="16sp"
-                    android:gravity="center"
-                    android:padding="32dp"
                     android:visibility="visible" />
 
             </LinearLayout>
@@ -191,11 +191,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="Recent Announcements"
                     android:textColor="#000000"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
+                    android:textStyle="bold" />
 
                 <!-- Announcements List -->
                 <LinearLayout
@@ -249,7 +249,9 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/home"
-                app:tint="@color/blueGreen" />
+                app:tint="@color/blueGreen"
+                android:clickable="true"
+                android:clipToOutline="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -340,5 +342,20 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <!-- Floating Action Button (FAB) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:backgroundTint="@color/blueGreen"
+        android:src="@drawable/qr_code"
+        app:tint="@android:color/white"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp" />
 
 </RelativeLayout>
