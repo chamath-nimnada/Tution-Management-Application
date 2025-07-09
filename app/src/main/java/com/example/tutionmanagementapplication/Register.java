@@ -1,10 +1,13 @@
 package com.example.tutionmanagementapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,9 +30,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+// Add this import for QR code generation
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 public class Register extends AppCompatActivity {
 
@@ -44,25 +58,21 @@ public class Register extends AppCompatActivity {
     /* ---------- Firebase ---------- */
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private FirebaseStorage storage;
 
     /* ---------- Form values ---------- */
     String txtFullName, txtEmail, txtBirthday, txtPhone, txtParentPhone, txtAddress,
             txtGrade, txtClass, txtPassword, txtConfirmPassword;
+
 
     /* ---------- Helpers ---------- */
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     /* Drop‑down data */
     private final HashMap<String, String[]> classMap = new HashMap<String, String[]>() {{
-        put("Grade 6",  new String[]{"Mathematics","Science","English"});
-        put("Grade 7",  new String[]{"Mathematics","Science","English","History"});
-        put("Grade 8",  new String[]{"Mathematics","Science","English","ICT"});
-        put("Grade 9",  new String[]{"Mathematics","Science","English","Commerce"});
-        put("O/L 2026", new String[]{"Maths (OL)","Science (OL)","English (OL)","ICT (OL)"});
-        put("A/L Arts", new String[]{"Economics","Political Science","ICT"});
-        put("A/L Science", new String[]{"Physics","Chemistry","Biology","Combined Maths"});
+        put("OL", new String[]{"Mathematics", "Science", "English", "History", "ICT", "Commerce"});
+        put("AL", new String[]{"Mathematics", "Science", "Technology", "Commerce"});
     }};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +83,13 @@ public class Register extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        //Go back to main page
+        ImageView backButton = findViewById(R.id.goBack);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         /* ---------- bind views ---------- */
@@ -93,6 +110,7 @@ public class Register extends AppCompatActivity {
         /* ---------- Firebase ---------- */
         mAuth = FirebaseAuth.getInstance();
         db    = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         /* ---------- drop‑downs ---------- */
         initGradeSpinner();
@@ -149,38 +167,126 @@ public class Register extends AppCompatActivity {
                 .addOnSuccessListener(authResult -> {
                     String uid = authResult.getUser().getUid();
 
-                    Map<String, Object> student = new HashMap<>();
-                    student.put("uid", uid);
-                    student.put("fullName",      txtFullName);
-                    student.put("email",         txtEmail);
-                    student.put("birthday",      txtBirthday);
-                    student.put("phone",         txtPhone);
-                    student.put("parentPhone",   txtParentPhone);
-                    student.put("address",       txtAddress);
-                    student.put("grade",         txtGrade);
-                    student.put("class",         txtClass);
-                    student.put("registeredAt",  System.currentTimeMillis());
-                    student.put("position",      "student");
-                    student.put("status",        "pending");
-
-                    db.collection("students")
-                            .document(uid)          // doc id = uid
-                            .set(student)
-                            .addOnSuccessListener(unused -> {
-                                Toast.makeText(Register.this,
-                                        "Registered successfully!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Register.this, Login.class));
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(Register.this,
-                                        "Firestore error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                restoreButton();
-                            });
+                    // Generate QR code with student information
+                    generateAndUploadQRCode(uid);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(Register.this,
                             "Auth error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    restoreButton();
+                });
+    }
+
+    /* ---------------------------------- */
+    /*         QR Code Generation         */
+    /* ---------------------------------- */
+    private void generateAndUploadQRCode(String uid) {
+        try {
+            // Create QR code content with student information
+            String qrContent = "STUDENT_ID:" + uid +
+                    "\nNAME:" + txtFullName +
+                    "\nEMAIL:" + txtEmail +
+                    "\nPHONE:" + txtPhone;
+
+            // Generate QR code bitmap
+            Bitmap qrBitmap = generateQRCode(qrContent);
+
+            if (qrBitmap != null) {
+                // Convert bitmap to byte array
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                qrBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] qrData = baos.toByteArray();
+
+                // Upload QR code to Firebase Storage
+                StorageReference qrRef = storage.getReference()
+                        .child("qr_codes")
+                        .child(uid + ".png");
+
+                UploadTask uploadTask = qrRef.putBytes(qrData);
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    // Get download URL
+                    qrRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String qrDownloadUrl = uri.toString();
+                        // Save student data with QR code URL
+                        saveStudentDataWithQR(uid, qrDownloadUrl, qrContent);
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(Register.this,
+                                "Failed to get QR code URL: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        restoreButton();
+                    });
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(Register.this,
+                            "Failed to upload QR code: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    restoreButton();
+                });
+            } else {
+                Toast.makeText(Register.this,
+                        "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+                restoreButton();
+            }
+        } catch (Exception e) {
+            Toast.makeText(Register.this,
+                    "QR generation error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            restoreButton();
+        }
+    }
+
+    private Bitmap generateQRCode(String content) {
+        try {
+            MultiFormatWriter writer = new MultiFormatWriter();
+            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512);
+
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+
+            return bitmap;
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveStudentDataWithQR(String uid, String qrImageUrl, String qrContent) {
+        Map<String, Object> student = new HashMap<>();
+        student.put("uid", uid);
+        student.put("fullName",      txtFullName);
+        student.put("email",         txtEmail);
+        student.put("birthday",      txtBirthday);
+        student.put("phone",         txtPhone);
+        student.put("parentPhone",   txtParentPhone);
+        student.put("address",       txtAddress);
+        student.put("grade",         txtGrade);
+        student.put("class",         txtClass);
+        student.put("registeredAt",  System.currentTimeMillis());
+        student.put("position",      "student");
+        student.put("status",        "approved");
+
+        // Add QR code related fields
+        student.put("qrImageUrl",    qrImageUrl);
+        student.put("qrContent",     qrContent);
+        student.put("qrGeneratedAt", System.currentTimeMillis());
+
+        db.collection("students")
+                .document(uid)
+                .set(student)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(Register.this,
+                            "Registered successfully with QR code!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Register.this, Login.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(Register.this,
+                            "Firestore error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     restoreButton();
                 });
     }
@@ -194,14 +300,22 @@ public class Register extends AppCompatActivity {
     /*       grade/subject drop‑downs     */
     /* ---------------------------------- */
     private void initGradeSpinner() {
-        String[] grades = classMap.keySet().toArray(new String[0]);
+        // First dropdown options
+        String[] grades = {"OL", "AL"};
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_dropdown_item_1line, grades);
         gradeCombo.setAdapter(gradeAdapter);
+        gradeCombo.setThreshold(1000); // Won't show dropdown on typing, only on click
 
-        gradeCombo.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedGrade = (String) parent.getItemAtPosition(position);
-            loadClassSpinner(selectedGrade);
+        // Show dropdown when clicked
+        gradeCombo.setOnClickListener(v -> gradeCombo.showDropDown());
+
+        gradeCombo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedGrade = (String) parent.getItemAtPosition(position);
+                loadClassSpinner(selectedGrade);
+            }
         });
     }
 
@@ -211,6 +325,19 @@ public class Register extends AppCompatActivity {
                 this, android.R.layout.simple_dropdown_item_1line, subjects);
         classCombo.setAdapter(classAdapter);
         classCombo.setEnabled(true);
-        classCombo.setText("");  // clear previous selection
+        classCombo.setText(""); // Clear previous selection
+        classCombo.setThreshold(1000); // Won't show dropdown on typing, only on click
+
+        // Show dropdown when clicked
+        classCombo.setOnClickListener(v -> classCombo.showDropDown());
+
+        // Handle second dropdown selection if needed
+        classCombo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedSubject = (String) parent.getItemAtPosition(position);
+                // Handle subject selection here
+            }
+        });
     }
 }

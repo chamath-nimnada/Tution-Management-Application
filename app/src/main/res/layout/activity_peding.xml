@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".student.Pending">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waiting for Admin Approvel"
+        android:gravity="center"
+        android:layout_marginTop="360dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You will receive an email shortly after your account is approved."
+        android:padding="20sp"
+        android:gravity="center"
+        android:layout_marginTop="380dp"
+        android:textColor="@color/gray"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/goBack"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_page_back"
+        android:padding="18sp"
+        android:gravity="center"
+        android:layout_marginTop="540dp"
+        android:textColor="@color/gray"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

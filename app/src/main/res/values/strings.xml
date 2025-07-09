@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Tution Management Application</string>
+    <string name="app_name">Tuition LMS</string>
+    <string name="home_page_back"><![CDATA[<-- Home Page]]></string>
 </resources>

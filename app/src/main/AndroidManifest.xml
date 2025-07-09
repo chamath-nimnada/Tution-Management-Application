@@ -15,8 +15,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionManagementApplication">
         <activity
-            android:name=".student.StudentDashboard"
+            android:name=".student.QrView"
+            android:exported="false"
+            android:parentActivityName=".student.StudentDashboard"
+            android:theme="@style/Theme.TutionManagementApplication" />
+        <activity
+            android:name=".student.ProfileDashboard"
             android:exported="false" />
+        <activity
+            android:name=".student.CalendarDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".student.CourseDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".student.Pending"
+            android:exported="false" />
+        <activity
+            android:name=".student.StudentDashboard"
+            android:exported="false"
+            android:theme="@style/Theme.TutionManagementApplication"/>
         <activity
             android:name=".Register"
             android:exported="false" />

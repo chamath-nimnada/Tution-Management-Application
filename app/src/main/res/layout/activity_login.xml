@@ -25,26 +25,33 @@
             android:layout_gravity="center_horizontal"
             android:padding="25dp">
 
-            <ImageView
-                android:id="@+id/goBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ico_arrow_back"
-                android:backgroundTint="@color/gray"
-                android:layout_marginBottom="20dp"
-                android:clickable="true"
-                android:focusable="true"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:text="Login Page"
-                android:id="@+id/loginText"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/gray"
-                android:padding="8dp"/>
+                <ImageView
+                    android:id="@+id/goBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ico_arrow_back"
+                    android:backgroundTint="@color/gray"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginTop="11dp"/>
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Login Page"
+                    android:id="@+id/loginText"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:padding="8dp"/>
+
+            </RelativeLayout>
 
             <EditText
                 android:layout_width="match_parent"
@@ -52,7 +59,7 @@
                 android:id="@+id/username"
                 android:background="@drawable/edit_text_outline"
                 android:drawablePadding="8dp"
-                android:hint="Username"
+                android:hint="Email"
                 android:padding="14dp"
                 android:layout_marginTop="15dp"/>
 
@@ -80,7 +87,7 @@
             <ProgressBar
                 android:id="@+id/loginProgressBar"
                 style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"

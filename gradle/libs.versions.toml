@@ -1,5 +1,9 @@
 [versions]
 agp = "8.11.0"
+core = "3.5.3"
+coreVersion = "3.5.1"
+firebaseStorage = "21.0.2"
+glide = "4.16.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -10,8 +14,15 @@ constraintlayout = "2.1.4"
 googleGmsGoogleServices = "4.4.3"
 firebaseFirestore = "25.1.4"
 firebaseAuth = "23.2.1"
+zxingAndroidEmbedded = "4.3.0"
+firebaseDatabase = "21.0.0"
 
 [libraries]
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+core = { module = "com.google.zxing:core", version.ref = "core" }
+core-v351 = { module = "com.google.zxing:core", version.ref = "coreVersion" }
+firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebaseStorage" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -21,6 +32,8 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

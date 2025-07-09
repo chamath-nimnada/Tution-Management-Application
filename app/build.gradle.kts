@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+
 }
 
 android {
@@ -40,7 +41,19 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // QR Code generation library
+    implementation(libs.core.v351)
+    implementation(libs.zxing.android.embedded)
+    // Firebase Storage (if not already added)
+    implementation(libs.firebase.storage)
+
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
+
 }
