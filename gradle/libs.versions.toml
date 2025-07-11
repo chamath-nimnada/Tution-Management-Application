@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.0"
+cardview = "1.0.0"
 core = "3.5.3"
 coreVersion = "3.5.1"
 firebaseStorage = "21.0.2"
@@ -18,6 +19,7 @@ zxingAndroidEmbedded = "4.3.0"
 firebaseDatabase = "21.0.0"
 
 [libraries]
+cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 core = { module = "com.google.zxing:core", version.ref = "core" }
 core-v351 = { module = "com.google.zxing:core", version.ref = "coreVersion" }

@@ -17,9 +17,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.tutionmanagementapplication.admin.AdminDashboard;
 import com.example.tutionmanagementapplication.student.Pending;
 import com.example.tutionmanagementapplication.student.StudentDashboard;
+import com.example.tutionmanagementapplication.teacher.TeacherDashboard;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
@@ -92,55 +95,83 @@ public class Login extends AppCompatActivity {
 
         mAuth.signInWithEmailAndPassword(txtEmail, txtPassword)
                 .addOnSuccessListener(authResult -> {
-
-                    /* -------- 2️⃣  fetch profile doc -------- */
                     String uid = authResult.getUser().getUid();
 
+                    // Check in students collection
                     db.collection("students").document(uid).get()
                             .addOnSuccessListener(snapshot -> {
-                                progressBar.setVisibility(View.INVISIBLE);   // done loading
-
-                                if (!snapshot.exists()) {
-                                    Toast.makeText(Login.this,
-                                            "Profile not found. Contact admin.", Toast.LENGTH_LONG).show();
-                                    restoreButton();
-                                    return;
-                                }
-
-                                String status = snapshot.getString("status");
-                                if (status == null) status = "";       // avoid NPE
-
-                                switch (status.toLowerCase()) {
-                                    case "approved":
-                                        startActivity(new Intent(Login.this, StudentDashboard.class));
-                                        finish();
-                                        break;
-
-                                    case "pending":
-                                        startActivity(new Intent(Login.this, Pending.class));
-                                        finish();
-                                        break;
-
-                                    default:
-                                        Toast.makeText(Login.this,
-                                                "Account status: " + status, Toast.LENGTH_LONG).show();
-                                        restoreButton();
-                                        break;
+                                if (snapshot.exists()) {
+                                    handleStudentLogin(snapshot);
+                                } else {
+                                    // Check in teachers collection
+                                    db.collection("teachers").document(uid).get()
+                                            .addOnSuccessListener(teacherSnapshot -> {
+                                                if (teacherSnapshot.exists()) {
+                                                    startActivity(new Intent(Login.this, TeacherDashboard.class));
+                                                    finish();
+                                                } else {
+                                                    // Check in admin collection
+                                                    db.collection("admin").document(uid).get()
+                                                            .addOnSuccessListener(adminSnapshot -> {
+                                                                if (adminSnapshot.exists()) {
+                                                                    startActivity(new Intent(Login.this, AdminDashboard.class));
+                                                                    finish();
+                                                                } else {
+                                                                    Toast.makeText(Login.this,
+                                                                            "Profile not found. Contact admin.", Toast.LENGTH_LONG).show();
+                                                                    restoreButton();
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                                showError(e.getMessage());
+                                                            });
+                                                }
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                showError(e.getMessage());
+                                            });
                                 }
                             })
                             .addOnFailureListener(e -> {
-                                Toast.makeText(Login.this,
-                                        "Couldn’t read account status: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                restoreButton();
+                                showError(e.getMessage());
                             });
-
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(Login.this,
-                            "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    restoreButton();
+                    showError(e.getMessage());
                 });
     }
+
+    private void handleStudentLogin(DocumentSnapshot snapshot) {
+        progressBar.setVisibility(View.INVISIBLE);   // done loading
+
+        String status = snapshot.getString("status");
+        if (status == null) status = "";
+
+        switch (status.toLowerCase()) {
+            case "approved":
+                startActivity(new Intent(Login.this, StudentDashboard.class));
+                finish();
+                break;
+
+            case "pending":
+                startActivity(new Intent(Login.this, Pending.class));
+                finish();
+                break;
+
+            default:
+                Toast.makeText(Login.this,
+                        "Account status: " + status, Toast.LENGTH_LONG).show();
+                restoreButton();
+                break;
+        }
+    }
+
+    private void showError(String message) {
+        Toast.makeText(Login.this,
+                "Couldn't read account status: " + message, Toast.LENGTH_LONG).show();
+        restoreButton();
+    }
+
 
     private void restoreButton() {
         progressBar.setVisibility(View.INVISIBLE);
