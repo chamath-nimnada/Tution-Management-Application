@@ -15,6 +15,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionManagementApplication">
         <activity
+            android:name=".admin.AssignClassSubject"
+            android:exported="false" />
+        <activity
+            android:name=".admin.UsersDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ProfileDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".teacher.TeacherDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ClassSubjectDashboad"
+            android:exported="false" />
+        <activity
+            android:name=".admin.CourseAssign"
+            android:exported="false" />
+        <activity
             android:name=".admin.AdminDashboard"
             android:exported="false" />
         <activity
