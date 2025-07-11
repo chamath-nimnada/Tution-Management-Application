@@ -2,7 +2,9 @@ package com.example.tutionmanagementapplication.student;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.tutionmanagementapplication.MainActivity;
 import com.example.tutionmanagementapplication.R;
 
 public class ProfileDashboard extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class ProfileDashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        setContentView(R.layout.activity_profile_dashboard);
 
         ///
         ///
@@ -39,10 +43,15 @@ public class ProfileDashboard extends AppCompatActivity {
             Intent intent = new Intent(this, CalendarDashboard.class);
             startActivity(intent);
         });
-
         LinearLayout dashboard = findViewById(R.id.navDashboard);
         dashboard.setOnClickListener(view -> {
             Intent intent = new Intent(this, StudentDashboard.class);
+            startActivity(intent);
+        });
+
+        Button btnLogout = findViewById(R.id.logOut);
+        btnLogout.setOnClickListener(view -> {
+            Intent intent =  new Intent(this, MainActivity.class);
             startActivity(intent);
         });
     }

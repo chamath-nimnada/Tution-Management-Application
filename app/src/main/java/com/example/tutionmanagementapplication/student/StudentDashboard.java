@@ -125,9 +125,9 @@ public class StudentDashboard extends AppCompatActivity {
             startActivity(intent);
         });
 
-        LinearLayout dashboard = findViewById(R.id.navDashboard);
+        LinearLayout dashboard = findViewById(R.id.navCalendar);
         dashboard.setOnClickListener(view -> {
-            Intent intent = new Intent(this, StudentDashboard.class);
+            Intent intent = new Intent(this, CalendarDashboard.class);
             startActivity(intent);
         });
 
