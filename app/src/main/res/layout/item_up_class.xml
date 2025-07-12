@@ -11,12 +11,14 @@
 
     <!-- Class Content -->
     <LinearLayout
+        android:id="@+id/upcomingClassContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/classDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upcoming Class"
@@ -35,10 +37,10 @@
             android:layout_marginBottom="8dp" />
 
         <TextView
-            android:id="@+id/classStartDuration"
+            android:id="@+id/classTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10:00 AM - 2 Hours"
+            android:text="10:00 AM"
             android:textColor="#6C757D"
             android:textSize="16sp" />
 
