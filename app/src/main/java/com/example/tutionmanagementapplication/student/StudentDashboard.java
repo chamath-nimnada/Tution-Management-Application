@@ -3,11 +3,11 @@ package com.example.tutionmanagementapplication.student;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class StudentDashboard extends AppCompatActivity {
 
@@ -48,11 +50,9 @@ public class StudentDashboard extends AppCompatActivity {
         // Load user data
         if (currentUser != null) {
             Log.d(TAG, "Current user found: " + currentUser.getEmail());
-            Log.d(TAG, "Current user UID: " + currentUser.getUid());
             loadUserData();
         } else {
             Log.w(TAG, "No current user found");
-            // User is not logged in, redirect to login
             redirectToLogin();
         }
 
@@ -70,72 +70,82 @@ public class StudentDashboard extends AppCompatActivity {
 
     private void initializeViews() {
         welcomeMessage = findViewById(R.id.welcomeMessage);
+
+        // Navigations
+        LinearLayout course = findViewById(R.id.navCourses);
+        course.setOnClickListener(view -> startActivity(new Intent(this, CourseDashboard.class)));
+
+        LinearLayout calendar = findViewById(R.id.navCalendar);
+        calendar.setOnClickListener(view -> startActivity(new Intent(this, CalendarDashboard.class)));
+
+        LinearLayout profile = findViewById(R.id.navProfile);
+        profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileDashboard.class)));
     }
 
     private void loadUserData() {
-        // Show loading state
-        welcomeMessage.setText("Welcome, Loading...");
-
-        // Get current user ID
         String userId = currentUser.getUid();
-        Log.d(TAG, "Loading user data for userId: " + userId);
-
-        // Reference to user document in Firestore
         DocumentReference userRef = db.collection("students").document(userId);
 
-        // Fetch user data
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                Log.d(TAG, "Document exists: " + document.exists());
-
                 if (document.exists()) {
-                    // Document exists, get user data
                     String fullName = document.getString("fullName");
-                    Log.d(TAG, "Full name retrieved: " + fullName);
+                    String className = document.getString("className");
 
-                    // Log all available fields for debugging
-                    Log.d(TAG, "All document data: " + document.getData());
+                    welcomeMessage.setText((fullName != null && !fullName.isEmpty())
+                            ? "Welcome, " + fullName + "!" : "Welcome, User!");
 
-                    // Update UI with user name
-                    if (fullName != null && !fullName.isEmpty()) {
-                        welcomeMessage.setText("Welcome, " + fullName + "!");
+                    if (className != null && !className.isEmpty()) {
+                        loadUpcomingClasses(className);
                     } else {
-                        welcomeMessage.setText("Welcome, User!");
+                        Log.w(TAG, "No className found for user");
                     }
-
-                    Log.d(TAG, "User data loaded successfully");
                 } else {
-                    Log.w(TAG, "User document doesn't exist for userId: " + userId);
                     handleUserDataError();
                 }
             } else {
                 Log.e(TAG, "Error getting user document", task.getException());
-                if (task.getException() != null) {
-                    Log.e(TAG, "Error details: " + task.getException().getMessage());
-                }
                 handleUserDataError();
             }
         });
+    }
 
-        // Navigations
-        LinearLayout course = findViewById(R.id.navCourses);
-        course.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CourseDashboard.class);
-            startActivity(intent);
-        });
+    private void loadUpcomingClasses(String className) {
+        LinearLayout upcomingClassContainer = findViewById(R.id.upcomingClassContainer);
+        TextView noUpcomingClass = findViewById(R.id.noUpcomingClass);
 
-        LinearLayout dashboard = findViewById(R.id.navCalendar);
-        dashboard.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CalendarDashboard.class);
-            startActivity(intent);
-        });
+        upcomingClassContainer.removeAllViews();
 
-        LinearLayout announcements = findViewById(R.id.navProfile);
-        announcements.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ProfileDashboard.class);
-            startActivity(intent);
-        });
+        db.collection("classes")
+                .whereEqualTo("className", className)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
+                        noUpcomingClass.setVisibility(View.GONE);
+
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            View classCard = getLayoutInflater().inflate(R.layout.item_up_class, null);
+
+                            TextView classDate = classCard.findViewById(R.id.classDate);
+                            TextView classNameText = classCard.findViewById(R.id.className);
+                            TextView classTime = classCard.findViewById(R.id.classTime);
+
+                            classDate.setText("Date: " + doc.getString("date"));
+                            classNameText.setText(doc.getString("className"));
+                            classTime.setText("Time: " + doc.getString("time"));
+
+                            upcomingClassContainer.addView(classCard);
+                        }
+                    } else {
+                        noUpcomingClass.setVisibility(View.VISIBLE);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to fetch upcoming classes", e);
+                    Toast.makeText(this, "Failed to load upcoming classes", Toast.LENGTH_SHORT).show();
+                    noUpcomingClass.setVisibility(View.VISIBLE);
+                });
     }
 
     private void handleUserDataError() {
@@ -146,19 +156,18 @@ public class StudentDashboard extends AppCompatActivity {
     private void redirectToLogin() {
         welcomeMessage.setText("Welcome, Please log in!");
         Toast.makeText(this, "Please log in to continue", Toast.LENGTH_LONG).show();
-        // Redirect logic can be added here if needed
+        // Optional: Redirect to login activity
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
+        if (mAuth.getCurrentUser() == null) {
             redirectToLogin();
         }
     }
 
-    // User data model class
+    // User model (optional but kept for reference)
     public static class User {
         private String fullName;
         private String email;
@@ -188,35 +197,6 @@ public class StudentDashboard extends AppCompatActivity {
             this.status = status;
         }
 
-        // Getters and setters
-        public String getFullName() { return fullName; }
-        public void setFullName(String fullName) { this.fullName = fullName; }
-
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getAddress() { return address; }
-        public void setAddress(String address) { this.address = address; }
-
-        public String getBirthday() { return birthday; }
-        public void setBirthday(String birthday) { this.birthday = birthday; }
-
-        public String getClassName() { return className; }
-        public void setClassName(String className) { this.className = className; }
-
-        public String getGrade() { return grade; }
-        public void setGrade(String grade) { this.grade = grade; }
-
-        public String getParentPhone() { return parentPhone; }
-        public void setParentPhone(String parentPhone) { this.parentPhone = parentPhone; }
-
-        public String getPhone() { return phone; }
-        public void setPhone(String phone) { this.phone = phone; }
-
-        public String getPosition() { return position; }
-        public void setPosition(String position) { this.position = position; }
-
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
+        // Getters and setters...
     }
 }

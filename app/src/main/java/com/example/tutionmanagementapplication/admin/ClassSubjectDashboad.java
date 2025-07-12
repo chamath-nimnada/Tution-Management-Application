@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tutionmanagementapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClassSubjectDashboad extends AppCompatActivity {
 
@@ -41,6 +42,13 @@ public class ClassSubjectDashboad extends AppCompatActivity {
         LinearLayout announcements = findViewById(R.id.navProfile);
         announcements.setOnClickListener(view -> {
             Intent intent = new Intent(this, ProfileDashboard.class);
+            startActivity(intent);
+        });
+
+        // Floating action button to AddClasses page
+        FloatingActionButton fabAddClass = findViewById(R.id.userAddTask);
+        fabAddClass.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AddClasses.class);
             startActivity(intent);
         });
     }

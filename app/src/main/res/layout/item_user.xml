@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/item_pending_user.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/card_background"
+    android:background="?attr/selectableItemBackground"
     android:padding="16dp"
     android:layout_marginBottom="8dp"
     android:clickable="true">
@@ -13,10 +12,11 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/pending_user"
-        android:background="@drawable/notification_icon_background"
+        android:background="@drawable/profile"
+        android:backgroundTint="@color/gray"
         android:padding="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="7dp"
         android:layout_gravity="top" />
 
     <!-- User Content -->
@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/pendingUser"
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Name"
@@ -37,24 +37,31 @@
             android:layout_marginBottom="4dp" />
 
         <TextView
-            android:id="@+id/pendingUserEmail"
+            android:id="@+id/userEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
             android:textColor="#6C757D"
             android:textSize="14sp" />
 
-        <!-- Optional: Add phone number display -->
         <TextView
-            android:id="@+id/pendingUserPhone"
+            android:id="@+id/userPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone"
+            android:text="Phone No"
             android:textColor="#6C757D"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp"
-            android:visibility="gone" />
-
+            android:textSize="14sp" />
     </LinearLayout>
 
+    <!-- Forward Icon -->
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/arrow_forward"
+        android:backgroundTint="@color/blueGreen"
+        android:padding="8dp"
+        android:clickable="true"
+        android:clipToOutline="true"/>
 </LinearLayout>

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
-
 }
 
 android {
@@ -31,6 +30,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    packagingOptions {
+        exclude("META-INF/NOTICE.md")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/ASL2.0")
+        exclude("META-INF/LGPL2.1")
+        exclude("META-INF/DEPENDENCIES")
+        pickFirst("META-INF/mailcap")
+        pickFirst("META-INF/mimetypes.default")
+    }
 }
 
 dependencies {
@@ -49,7 +59,8 @@ dependencies {
     // QR Code generation library
     implementation(libs.core.v351)
     implementation(libs.zxing.android.embedded)
-    // Firebase Storage (if not already added)
+
+    // Firebase Storage
     implementation(libs.firebase.storage)
 
     implementation(libs.glide)
@@ -57,5 +68,11 @@ dependencies {
 
     implementation(libs.cardview)
 
+    //Email
+    implementation(libs.android.mail)
+    implementation(libs.android.activation)
 
+    //Map
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 }

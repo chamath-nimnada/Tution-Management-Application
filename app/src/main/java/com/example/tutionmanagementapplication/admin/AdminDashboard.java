@@ -42,6 +42,9 @@ public class AdminDashboard extends AppCompatActivity {
     private TextView noPendingAcc;
     private List<Student> pendingStudents;
 
+    // Add this constant at the top of your class
+    private static final int REQUEST_CODE_ASSIGN_CLASS = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +81,12 @@ public class AdminDashboard extends AppCompatActivity {
         // Bind the TextView
         totalStudentTextView = findViewById(R.id.totalStudent);
 
+        // Initialize the total teachers TextView
+        totalTeachers = findViewById(R.id.totalTeachers);
+
         // Your existing method calls
         countApprovedStudents();
+        countAllTeachers();
 
         // New initialization for pending students
         initializePendingStudentsViews();
@@ -104,9 +111,8 @@ public class AdminDashboard extends AppCompatActivity {
                 });
     }
 
-    // Your existing method - unchanged
-    private void countAllStudents() {
-        db.collection("students")
+    private void countAllTeachers() {
+        db.collection("teachers")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -209,13 +215,16 @@ public class AdminDashboard extends AppCompatActivity {
         pendingStudentContainer.addView(itemView);
     }
 
+    // Modified handlePendingStudentClick method
     private void handlePendingStudentClick(Student student) {
-        // Handle click on pending student item
-        // You can show a dialog, navigate to details, etc.
-        Toast.makeText(this, "Clicked on: " + student.getFullName(), Toast.LENGTH_SHORT).show();
-
-        // Example: Show student details
-        showStudentDetails(student);
+        Intent intent = new Intent(this, AssignClassSubject.class);
+        intent.putExtra("student_id", student.getUid()); // Use UID as document ID
+        intent.putExtra("student_name", student.getFullName());
+        intent.putExtra("student_email", student.getEmail());
+        intent.putExtra("student_phone", student.getPhone());
+        intent.putExtra("student_address", student.getAddress());
+        intent.putExtra("student_course", student.getClazz()); // or getCourse() if you have it
+        startActivityForResult(intent, REQUEST_CODE_ASSIGN_CLASS);
     }
 
     private void showStudentDetails(Student student) {
@@ -234,4 +243,5 @@ public class AdminDashboard extends AppCompatActivity {
     public void refreshPendingStudents() {
         loadPendingStudents();
     }
+
 }

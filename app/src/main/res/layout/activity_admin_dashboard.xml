@@ -236,7 +236,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Fees Pending"
+                                android:text="Income"
                                 android:textColor="#6C757D"
                                 android:textSize="14sp"
                                 android:layout_marginBottom="4dp" />
@@ -250,6 +250,7 @@
                                 android:layout_marginBottom="8dp" />
 
                             <TextView
+                                android:id="@+id/incomeValue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Rs 0.00"

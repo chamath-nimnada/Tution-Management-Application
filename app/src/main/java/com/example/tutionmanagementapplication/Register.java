@@ -267,7 +267,6 @@ public class Register extends AppCompatActivity {
         student.put("grade",         txtGrade);
         student.put("class",         txtClass);
         student.put("registeredAt",  System.currentTimeMillis());
-        student.put("position",      "admin");
         student.put("status",        "pending");
 
         // Add QR code related fields
@@ -275,7 +274,7 @@ public class Register extends AppCompatActivity {
         student.put("qrContent",     qrContent);
         student.put("qrGeneratedAt", System.currentTimeMillis());
 
-        db.collection("teachers")
+        db.collection("students")
                 .document(uid)
                 .set(student)
                 .addOnSuccessListener(unused -> {

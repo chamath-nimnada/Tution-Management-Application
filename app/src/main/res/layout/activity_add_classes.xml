@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:id="@+id/main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".admin.AddClasses">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/goBack"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/ico_arrow_back"
+                    android:backgroundTint="@color/gray"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Assign New Classes"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/gray"
+                    android:layout_marginLeft="80dp"/>
+
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="19dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Fill the Details"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/blueGreen"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"/>
+
+                    <LinearLayout
+                        android:id="@+id/teacherContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                    <EditText
+                        android:id="@+id/className"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:drawablePadding="8dp"
+                        android:hint="Class Name"
+                        android:inputType="textPersonName"
+                        android:padding="9dp" />
+
+                    <EditText
+                        android:id="@+id/classDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:drawablePadding="8dp"
+                        android:hint="Date (DD/MM/YYYY)"
+                        android:inputType="textEmailAddress"
+                        android:padding="9dp" />
+
+                    <EditText
+                        android:id="@+id/classTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:drawablePadding="8dp"
+                        android:hint="Time"
+                        android:inputType="text"
+                        android:padding="9dp" />
+
+                    <EditText
+                        android:id="@+id/hallNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:drawablePadding="8dp"
+                        android:hint="Hall No"
+                        android:padding="9dp" />
+
+                    <EditText
+                        android:id="@+id/studentCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:drawablePadding="8dp"
+                        android:hint="Maximum Students Count"
+                        android:inputType="number"
+                        android:padding="9dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Spinner
+                            android:id="@+id/assignTeacherCombo"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edit_text_outline"
+                            android:padding="9dp"
+                            android:spinnerMode="dropdown"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@android:drawable/arrow_down_float"
+                            android:layout_marginRight="15dp"/>
+
+                    </RelativeLayout>
+
+                    <!-- Location Selection Section -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Class Location"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/blueGreen"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <EditText
+                        android:id="@+id/selectedLocationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/edit_text_outline"
+                        android:hint="Selected location will appear here"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:textSize="14sp"
+                        android:padding="9dp" />
+
+                    <!-- Map Fragment Container -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="10dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp">
+
+                        <fragment
+                            android:id="@+id/map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tap on the map to select location"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"/>
+
+                    <Button
+                        android:id="@+id/addClassBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="22dp"
+                        android:backgroundTint="@color/blueGreen"
+                        android:text="Add Class"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
